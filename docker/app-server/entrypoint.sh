@@ -1,3 +1,4 @@
 #!/bin/sh
 
-/home/bin/app-server
+/home/bin/app-server\
+    -port 8000

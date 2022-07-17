@@ -3,8 +3,10 @@ version: '4.10'
 services:
   redis:
     image: "redis:7.0.2"
+    ports:
+      - "6379:6379"
     restart: always
-  
+
   app-server:
     build:
       context: .

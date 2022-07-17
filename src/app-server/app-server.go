@@ -1,11 +1,12 @@
 package main
 
 import (
-    "log"
-    "strconv"
-    "net/http"
+	"flag"
+	"log"
+	"net/http"
+	"strconv"
 
-    "github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2"
 )
 
 type BinaryOpParams struct {
@@ -29,43 +30,47 @@ func applyBinaryOp(c *fiber.Ctx, op BinaryOp) (string, error) {
 } 
 
 func main() {
+    port := flag.String("port", "8080", "service port")
+    
+    flag.Parse()
+
     app := fiber.New()
 
     // GET /api/add
     app.Get("/api/add", func(c *fiber.Ctx) error {
         ans, err := applyBinaryOp(c, func(lhs float64, rhs float64) float64 { return lhs + rhs })
         if (err != nil) {
-            return c.Status(http.StatusBadRequest).SendString(err.Error() + "\n")
+            return c.Status(http.StatusBadRequest).SendString(err.Error())
         }
-        return c.SendString(ans + "\n")
+        return c.SendString(ans)
     })
 
     // GET /api/sub
     app.Get("/api/sub", func(c *fiber.Ctx) error {
         ans, err := applyBinaryOp(c, func(lhs float64, rhs float64) float64 { return lhs - rhs })
         if (err != nil) {
-            return c.Status(http.StatusBadRequest).SendString(err.Error() + "\n")
+            return c.Status(http.StatusBadRequest).SendString(err.Error())
         }
-        return c.SendString(ans + "\n")
+        return c.SendString(ans)
     })
 
     // GET /api/mul
     app.Get("/api/sub", func(c *fiber.Ctx) error {
         ans, err := applyBinaryOp(c, func(lhs float64, rhs float64) float64 { return lhs * rhs })
         if (err != nil) {
-            return c.Status(http.StatusBadRequest).SendString(err.Error() + "\n")
+            return c.Status(http.StatusBadRequest).SendString(err.Error())
         }
-        return c.SendString(ans + "\n")
+        return c.SendString(ans)
     })
 
     // GET /api/div
     app.Get("/api/div", func(c *fiber.Ctx) error {
         ans, err := applyBinaryOp(c, func(lhs float64, rhs float64) float64 { return lhs / rhs })
         if (err != nil) {
-            return c.Status(http.StatusBadRequest).SendString(err.Error() + "\n")
+            return c.Status(http.StatusBadRequest).SendString(err.Error())
         }
-        return c.SendString(ans + "\n")
+        return c.SendString(ans)
     })
 
-    log.Fatal(app.Listen(":8000"))
+    log.Fatal(app.Listen(":" + *port))
 }
