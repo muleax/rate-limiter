@@ -1,1 +1,5 @@
-# rate-limiter
+```
+docker-compose up --build
+...
+docker-compose stop
+```

@@ -1,0 +1,22 @@
+version: '4.10'
+
+services:
+  redis:
+    image: "redis:7.0.2"
+    restart: always
+  
+  app-server:
+    build:
+      context: .
+      dockerfile: ./docker/app-server/Dockerfile
+    ports:
+      - "8000:8000"
+    restart: always
+
+  rate-limiter:
+    build:
+      context: .
+      dockerfile: ./docker/rate-limiter/Dockerfile
+    ports:
+      - "8080:8080"
+    restart: always
