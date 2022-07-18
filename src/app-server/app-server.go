@@ -1,12 +1,12 @@
 package main
 
 import (
-	"flag"
-	"log"
-	"net/http"
-	"strconv"
+    "flag"
+    "log"
+    "net/http"
+    "strconv"
 
-	"github.com/gofiber/fiber/v2"
+    "github.com/gofiber/fiber/v2"
 )
 
 type BinaryOpParams struct {

@@ -1,7 +1,5 @@
 FROM golang:1.18.3-alpine3.16
 
-#RUN apt-get update
-
 COPY src/app-server /home/src
 RUN cd /home/src && go build -o /home/bin/app-server
 

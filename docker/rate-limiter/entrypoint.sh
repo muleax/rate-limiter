@@ -5,4 +5,4 @@
     -limit 3\
     -app-endpoint app-server:8000\
     -redis-endpoint redis:6379\
-	-port 8080
+    -port 8080
