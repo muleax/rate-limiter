@@ -74,7 +74,7 @@ CONTAINER ID   NAME                          CPU %     MEM USAGE / LIMIT     MEM
 ```
 
 ## 2. Clustered setup
-EKS cluster was set up on three m5zn.xlarge instances. Attack client was run on a separate machine.
+EKS cluster set up on three m5zn.xlarge instances. Attack client runs on a separate machine.
                                                                                                                                
     +---------------------+          +-----------+        +---------------------+                    +---------------------+      
     |                     |          |           |------->|                     |-----------+------->|                     |      
@@ -96,7 +96,7 @@ EKS cluster was set up on three m5zn.xlarge instances. Attack client was run on 
                                                                           +---------------------+                                  
 
 
-The load was distributed evenly between pods, but for some reason, we didn't exceed 60k RPS. Given that the Rate-limiter and Redis pods were underloaded, we must have hit some other bound.
+CPU load is distributed evenly between pods, but for some reason, throughput doesn't exceed 60k RPS. Given that the Rate-limiter and Redis pods are underloaded, we must have hit some other bound.
 
 ```
 [ec2-user@ip-172-31-24-45 ~]$ cat ./attack.txt | vegeta attack -duration=15s -rate=100000 -max-workers=256 -connections=50000 | vegeta report
