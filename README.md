@@ -3,7 +3,7 @@ This project is for educational purposes only.
 
 Simple HTTP rate-limiting service, based on a fixed window alghoritm: https://dev.to/satrobit/rate-limiting-using-the-fixed-window-algorithm-2hgm
 
-
+```
 
     +----------------+            +----------------+            +----------------+
     |                |            |                |            |                |
@@ -18,7 +18,7 @@ Simple HTTP rate-limiting service, based on a fixed window alghoritm: https://de
                                   |     Redis      |
                                   |                |
                                   +----------------+
-
+```
 Rate-limiter acts as a reverse proxy, and forward client requests to App service. Each request is expected to come with an API key, wich is used to identify the source.
 
 For each incoming request Rate-limiter makes a Redis transaction of the form:
@@ -37,7 +37,7 @@ Rate-limiter checks the request count for the key and decides whether to forward
 # Performance
 
 ## 1. Simple setup
-
+```
                                        +------------------------------------------------------+
     +---------------------+            |  +--------------+   +-------------+   +-----------+  |
     |                     |            |  | Rate-limiter |   | App Service |   |   Redis   |  |
@@ -45,7 +45,7 @@ Rate-limiter checks the request count for the key and decides whether to forward
     |  (AWS m5zn.xlarge)  |            |  +--------------+   +-------------+   +-----------+  |
     +---------------------+            |                     (AWS m5zn.xlarge)                |
                                        +------------------------------------------------------+
-
+```
 - Window size: 5 seconds
 - Limit per window per API key: 3 request
 - 20 different API keys
@@ -75,7 +75,8 @@ CONTAINER ID   NAME                          CPU %     MEM USAGE / LIMIT     MEM
 
 ## 2. Clustered setup
 EKS cluster set up on three m5zn.xlarge instances. Attack client runs on a separate machine.
-                                                                                                                               
+
+```
   +---------------------+       +------+       +---------------------+            +---------------+
   |                     |       |      |------>|                     |-------+--->|               |
   |       Vegeta        |------>|  LB  |       |    Rate-limiter     |       |    |  App Service  |
@@ -89,12 +90,12 @@ EKS cluster set up on three m5zn.xlarge instances. Attack client runs on a separ
                                                +---------------------+   |                        
                                                                          |                       
                                                                          V                        
-                                                               +---------------------+
-                                                               |                     |
-                                                               |       Redis         |
-                                                               |  (AWS m5zn.xlarge)  |
-                                                               +---------------------+
-
+                                                               +---------------------+ 
+                                                               |                     | 
+                                                               |       Redis         | 
+                                                               |  (AWS m5zn.xlarge)  | 
+                                                               +---------------------+ 
+```
 
 CPU load is distributed evenly between pods, but for some reason, throughput doesn't exceed 60k RPS. Given that the Rate-limiter and Redis pods are underloaded, we must have hit some other bound.
 
