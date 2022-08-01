@@ -76,24 +76,24 @@ CONTAINER ID   NAME                          CPU %     MEM USAGE / LIMIT     MEM
 ## 2. Clustered setup
 EKS cluster set up on three m5zn.xlarge instances. Attack client runs on a separate machine.
                                                                                                                                
-    +---------------------+          +-----------+        +---------------------+                    +---------------------+      
-    |                     |          |           |------->|                     |-----------+------->|                     |      
-    |       Vegeta        |--------->|    LB     |        |    Rate-limiter     |           |        |     App Service     |      
-    |  (AWS m5zn.2xlarge) |          |           |----+   |  (AWS m5zn.xlarge)  |---+       |        |  (AWS m5zn.xlarge)  |      
-    +---------------------+          +-----------+    |   +---------------------+   |       |        +---------------------+      
-                                                      |                             |       |                                     
-                                                      |   +---------------------+   |       |                                     
-                                                      |   |                     |-----------+                                     
-                                                      +-->|    Rate-limiter     |   |                                             
-                                                          |  (AWS m5zn.xlarge)  |---+                                             
-                                                          +---------------------+   |                                             
-                                                                                    |                                             
-                                                                                    V                                             
-                                                                          +---------------------+                                  
-                                                                          |                     |                                  
-                                                                          |       Redis         |                                  
-                                                                          |  (AWS m5zn.xlarge)  |                                  
-                                                                          +---------------------+                                  
+  +---------------------+       +------+       +---------------------+            +---------------+
+  |                     |       |      |------>|                     |-------+--->|               |
+  |       Vegeta        |------>|  LB  |       |    Rate-limiter     |       |    |  App Service  |
+  |  (AWS m5zn.2xlarge) |       |      |---+   |  (AWS m5zn.xlarge)  |---+   |    |               |
+  +---------------------+       +------+   |   +---------------------+   |   |    +---------------+
+                                           |                             |   |                     
+                                           |   +---------------------+   |   |                     
+                                           |   |                     |-------+                     
+                                           +-->|    Rate-limiter     |   |                        
+                                               |  (AWS m5zn.xlarge)  |---+                        
+                                               +---------------------+   |                        
+                                                                         |                       
+                                                                         V                        
+                                                               +---------------------+
+                                                               |                     |
+                                                               |       Redis         |
+                                                               |  (AWS m5zn.xlarge)  |
+                                                               +---------------------+
 
 
 CPU load is distributed evenly between pods, but for some reason, throughput doesn't exceed 60k RPS. Given that the Rate-limiter and Redis pods are underloaded, we must have hit some other bound.
